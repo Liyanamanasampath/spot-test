@@ -60,6 +60,7 @@
 <script>
 export default {
     name:'Nav',
+    props:['isLog'],
     data(){
         return{
             login:{
@@ -74,7 +75,6 @@ export default {
             },
             currentRoute:'',
             user:'',
-            isLog:false,
             reset:{
                 email:'',
                 password:'',
@@ -88,13 +88,6 @@ export default {
     },
     mounted() {
         this.user = JSON.parse(localStorage.getItem('user'));
-        console.log('this.user', this.user);
-        if(this.user) {
-            this.isLog = true;
-        }else{
-            this.isLog = false;
-        }
-
     },
     created() {
 

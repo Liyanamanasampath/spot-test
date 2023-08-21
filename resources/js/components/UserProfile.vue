@@ -14,8 +14,8 @@
                                              style="width: 180px; border-radius: 10px;">
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h5 class="mb-1">{{user[0].name}}</h5>
-                                        <p class="mb-2 pb-1" style="color: #2b2a2a;">{{user[0].email}}</p>
+                                        <h5 class="mb-1">{{user.name}}</h5>
+                                        <p class="mb-2 pb-1" style="color: #2b2a2a;">{{user.email}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -37,8 +37,7 @@ export default {
     },
     async created() {
         this.user = JSON.parse(localStorage.getItem('user'));
-        console.log(this.user,'user')
-        if(user) {
+        if(this.user) {
             this.isLog = true;
         }
     },

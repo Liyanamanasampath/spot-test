@@ -1,12 +1,11 @@
 <template>
     <div class="app">
-        <Nav/>
+        <Nav
+            :isLog="isLog"
+        />
         <h1>App vue</h1>
 
         <router-view></router-view>
-<!--        <div class="container-xl mh-100 p-3 my-3 bg-dark text-white -xl">-->
-<!--            <h1>HOME</h1>-->
-<!--        </div>-->
     </div>
 </template>
 
@@ -16,10 +15,23 @@ import Nav from './Nav'
 
 export default {
     name: "App",
-
+    data(){
+        return{
+            user:'',
+            isLog:false,
+        }
+    },
     components: {
         Nav
     },
+    mounted() {
+        this.user = JSON.parse(localStorage.getItem('user'));
+        if (this.user !== '') {
+            this.isLog = true;
+        } else {
+            this.isLog = false;
+        }
+    }
 }
 </script>
 

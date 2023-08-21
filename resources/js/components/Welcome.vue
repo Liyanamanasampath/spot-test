@@ -32,7 +32,7 @@
 
                                             <div class="form-check d-flex justify-content-center mb-5">
                                                 <label class="form-check-label" for="form2Example3">
-                                                    Already have an account ? <a href="#!" @click = "toRegister" >Create an account</a>
+                                                    New member ? <a href="#!" @click = "toRegister" >Create an account</a>
                                                 </label>
                                             </div>
                                             <div class="form-check d-flex justify-content-center mb-5" v-if="loginError">
@@ -80,7 +80,7 @@
                                                 <div class="form-outline flex-fill mb-0">
                                                     <input  v-model="registration.name" id="regiNameInput" type="text" class="form-control" />
                                                     <label class="form-label" for="form3Example1c">Your Name</label>
-                                                    <small id="emailHelp" class="form-text text-muted" v-if="registerError">{{registerError.name ? registerError.name[0] : ''}}</small>
+                                                    <small style="color: red" id="emailHelp" class="form-text" v-if="registerError">{{registerError.name ? registerError.name[0] : ''}}</small>
 
                                                 </div>
                                             </div>
@@ -90,7 +90,7 @@
                                                 <div class="form-outline flex-fill mb-0">
                                                     <input v-model="registration.email" id="regiEmailInput" type="email"  class="form-control" />
                                                     <label class="form-label" for="form3Example3c">Your Email</label>
-                                                    <small id="emailHelp" class="form-text text-muted" v-if="registerError">{{ registerError.email ? registerError.email[0] : ''}}</small>
+                                                    <small style="color: red" id="emailHelp" class="form-text" v-if="registerError">{{ registerError.email ? registerError.email[0] : ''}}</small>
 
                                                 </div>
                                             </div>
@@ -100,7 +100,7 @@
                                                 <div class="form-outline flex-fill mb-0">
                                                     <input v-model="registration.password" id="RegiPassowrdInput" type="password" class="form-control" />
                                                     <label class="form-label" for="form3Example4c">Password</label>
-                                                    <small id="emailHelp" class="form-text text-muted" v-if="registerError">{{ registerError.password ? registerError.password[0] : ''}}</small>
+                                                    <small style="color: red" id="emailHelp" class="form-text" v-if="registerError">{{ registerError.password ? registerError.password[0] : ''}}</small>
                                                 </div>
                                             </div>
 
@@ -193,11 +193,10 @@ export default {
         log() {
             axios.post('/api/login', this.login
             ).then(response => {
-                console.log("********", response.data.error);
                 if (response.data.error) {
                     this.loginError =response.data.error;
                 } else {
-                    localStorage.setItem("user", JSON.stringify(response.data.user, response.data.token));
+                    localStorage.setItem("user", JSON.stringify(response.data.user[0], response.data.token));
                     localStorage.setItem("token", JSON.stringify(response.data[0].token));
                     this.currentRoute = this.$router.currentRoute.name;
                     this.isLog = true;
@@ -222,7 +221,6 @@ export default {
                     this.registerError = response.data.errors;
                 }
                 else{
-                    console.log(response.data,'jhcuda')
                     localStorage.setItem("user", JSON.stringify(response.data.user, response.data.token));
                     localStorage.setItem("token", JSON.stringify(response.data.token));
                     this.currentRoute = this.$router.currentRoute.name;

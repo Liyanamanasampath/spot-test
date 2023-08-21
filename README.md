@@ -1,6 +1,6 @@
 # Laravel API for Order Processing
 
-This Laravel project implements a PHP REST API for processing new orders with authentication and integrates with a third-party API endpoint. The project follows the MVC design pattern and utilizes Laravel framework for efficient development.
+This Laravel project implements a login, register and logout functionalities using JWT Autentication
 
 ## Table of Contents
 
@@ -15,39 +15,28 @@ This Laravel project implements a PHP REST API for processing new orders with au
 
 ## Stage 01
 
-### 1. Create a PHP REST API endpoint for "New Order" processing with authentication
+### 1. REST API endpoint for user login
 
-- API endpoint: `/api/new-order`
+- API endpoint: `/api/login`
 - HTTP Method: POST
 - Request Body Parameters:
-  - Customer Name
-  - Order Value
-- Data stored in MySQL database
+    - User email
+    - User Password
 - API response includes:
-  - Order ID
-  - Process ID (randomly picked from ID pool between 1-10)
-  - Status
+    - User Object
+    - Token
 
-### 2. Submit Order Details to 3rd Party API Endpoint
+### 2. REST API endpoint for user registration
 
-- API Type: REST
-- Method: POST/JSON
-- Endpoint URL: https://wibip.free.beeceptor.com/order
-- Parameters submitted:
-
-
-## Stage 02
-
-### 3. Queueing API Requests for High Demand
-
-- Implement a queuing mechanism for API requests to handle high demand.
-- Configure the system to queue new orders until the configured number of parallel requests are reached.
-
-### 4. Simple Web Form and Indexed DB
-
-- Create a web form with 3 input parameters: Customer Name, Order Value, Order Date.
-- Upon submission, store values in the browser-based Indexed DB.
-- Implement a data table to view information from Indexed DB.
+- API endpoint: `/api/register`
+- HTTP Method: POST
+- Request Body Parameters:
+    - User email
+    - User name
+    - User Password
+- API response includes:
+    - User Object
+    - Token
 
 
 ## Getting Started
@@ -66,7 +55,7 @@ These instructions will help you set up and run the project on your local machin
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/sanathuj/Spot-Test.git
+   git clone https://github.com/Liyanamanasampath/spot-test.git
 
 
 2. Navigate to the project directory:
@@ -74,37 +63,42 @@ These instructions will help you set up and run the project on your local machin
    ```sh
    cd your-project
 
+3. Navigate to the project directory:
 
-3. Install composer dependencies:
+   ```sh
+   unzip
+
+
+4. Install composer dependencies:
 
    ```sh
    composer install
 
-4. Install npm dependencies:
+5. Install npm dependencies:
 
    ```sh
    npm install
 
 
-5. Create a .env file:
+6. Create a .env file:
 
    ```sh
    cp .env.example .env
 
 
-6. Generate an application key:
+7. Generate an application key:
 
    ```sh
    php artisan key:generate
-~
 
-7. Install JWT:
+
+8. Install JWT:
 
    ```sh
    php artisan jwt:secret
 
 
-8. Configure your database settings in the .env file:
+9. Configure your database settings in the .env file:
 
    ```sh
     DB_CONNECTION=mysql
@@ -114,88 +108,42 @@ These instructions will help you set up and run the project on your local machin
     DB_USERNAME=your_database_username
     DB_PASSWORD=your_database_password
 
-9. Artisan commands:
+10. Artisan commands:
 
-   ```sh
-   php artisan config:clear
-   php artisan config:cache
-   composer dump-autoload
-
-
-10. Run migrations and seed the database::
-
-   ```sh
-   php artisan migrate --seed
+```sh
+php artisan config:clear
+php artisan config:cache
+composer dump-autoload
+```
 
 
-11. Start the artisan server:
+11. Run migrations and seed the database::
+
+```sh
+php artisan migrate --seed
+```
+
+
+12. Start the artisan server:
 
     ```sh
     php artisan serve
+    ```
 
-12. Start the npm:
+13. Start the npm:
 
     ```sh
     npm run watch
     ```
 
-13. Start the queue process:
-
-    ```sh
-    php artisan queue:work
-    ```
-
-
-
-## Usage
-
-Follow the API documentation to use the "New Order" endpoint and submit order details to the 3rd party API. Access the web form to store and view data in the Indexed DB.
-
-## Stage 01
-In this project directory (postman_collection/laravel_api_for_order_processing.postman_collection.json) I have attached Postman collection for authenticate and order creation processes. Anyone can import it to Postman.
-
 ### 1. Login to the system using the following login details.
 I have use JWT Authentication mechanism for authenticate users and I already added the admin user to database using Laravel Seedr
 - Login Details:
-  - Email: admin@gmail.com
-  - Password: 123456
+    - Email: admin@gmail.com
+    - Password: 123456
 
 
-### 2. Order creation
+### 2. Difficulties when implementing this solution
 
-- Subsequently, the order will be saved to the 'orders' table with the order status as ORDERED when hit "Create New Order" API' with required details.
-
-
-## Stage 02
-
-### 1. Submit the order details to the 3rd-party API endpoint.
-
-- For handling high demand, API requests are queued. The queuing mechanism ensures that new orders are processed efficiently.
-- The application will check all orders with the 'ORDERED' and 'FAILED' status using a scheduled run. The current interval is set to 5 minutes. 
-
-- Retrieve orders and divide them into chunks of 5 units each. Update the status of these orders to 'PROCESSING' and send them to the job queue. (You have the flexibility to adjust the chunk size as needed.). 
-
-- When the job is running, send the details to the 3rd-party API endpoint.
-
-- If the data fails to be sent to the 3rd-party API endpoint within the job, update the order status to 'FAILED'.
-
-- If the data is successfully sent to the 3rd-party API endpoint within the job, update the order status to 'SUBMITTED'.
-
-- This process repeats every 5 minutes, attempting to send orders with 'FAILED' and 'ORDERED' statuses to the 3rd-party API.
-
-- When you need to sumbit order data to external endpoint, run command "php artisan command:submit_order_data". (we neeed to run this command manaully, because of we haven't configured any server level configuration for run this schedules automatically like "Supervisor")
-
-
-
-### Web Form
-- Access the Indexed DB data and store new data in the Indexed DB.
-- Log in to the application and it automatically navigate to the dashboard page. Here, you can manage the Indexed DB, as illustrated in the attached example screenshot. 
-
-- Login Details:
-  - Email: admin@gmail.com
-  - Password: 123456
-
-- If anyone needed to login as new user, then they can user register as a new user and login to the system
-
-
-
+- I have created all the functionalities with Laravel and Vue js (login, register, logout, view profile) and I used the authentication as JWT but after completing the assigment I have faced issue with GitHub authentication when pushing my code base to remote repository.
+- Using SSH I have overcome this issue and pushed my code to new branch (develop) and make it as default branch.
